@@ -1,0 +1,37 @@
+config:
+  target: "https://httpbin.org/"
+  phases:
+    - duration: 3
+      arrivalRate: 2
+plugins:
+  ensure:
+    thresholds:
+      - http.response_time.max: 500
+      - http.response_time.p95: 10000
+
+    conditions:
+      - expression: "http.request_rate > 2"
+      - expression: "vusers.failed == 0"
+      - expression: "http.response_time.min < 1000"
+        
+  
+  
+scenarios:
+    - name: "Create Account"
+      flow:
+      - post:
+          url: "{{target}}post"
+          json:
+            username: "emir"
+            password: "efee0067"
+          headers:
+            Content-Type: "application/json"
+            User-Agent: "PostmanRuntime/2.5.0"
+            Accept: "/"
+          capture:
+            - json: "$.json"
+              as: "response_body"
+            - json: "$.json"
+              as: "host"
+      - log: "response Body: {{ response_body }}"
+      - log: "host: {{ host }}"

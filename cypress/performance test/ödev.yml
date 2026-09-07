@@ -1,0 +1,50 @@
+config:
+  target: "https://reqres.in/"
+  phases:
+    - duration: 3
+      arrivalRate: 2
+
+
+      plugins:    
+  ensure:
+    thresholds:
+      - http.response_time.max: 500
+      - http.response_time.p95: 1000
+
+    conditions:
+      - expression: "http.request_rate > 2"
+      - expression: "vusers.failed == 0"
+      - expression: "http.response_time.min < 1000"
+
+  payload:
+    - path: "abc.csv"
+      fields:
+        - "keyword1" 
+        - "keyword2"
+
+scenarios:
+  - name: "Get a source"
+    flow:
+      - get:
+          url: "{{target}}api/users?param1={{ keyword1 }}"
+
+      - post:
+          url: "{{target}}api/users?param2={{ keyword2 }}"
+          json:
+            username: "emir"
+            password: "efee0067"
+            
+          headers:
+            Content-Type: "application/json"
+            User-Agent: "PostmanRuntime/2.5.0"
+            Accept: "*/*"
+          capture:
+            - json: "$.id"
+              as: "response_body"
+            - json: "$.id"
+              as: "host"
+
+      - log: "response Body: {{ response_body }}"
+      - log: "host: {{ host }}"
+      - log: "ilk değer: {{ keyword1 }}"
+      - log: "ikinci değer: {{ keyword2 }}"

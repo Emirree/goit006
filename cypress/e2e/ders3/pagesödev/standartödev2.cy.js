@@ -1,0 +1,17 @@
+describe("standart ödev testi yazma",function(){ 
+it("tc01_standart ödev testi",function(){ 
+cy.visit("https://www.edu.goit.global/account/login") 
+cy.get('[name="email"]').type("user888@gmail.com ")
+cy.get('[name="password"]').type("1234567890")
+cy.get('.eckniwg2').click()
+cy.wait(3000)
+cy.get('.logo-icon').should("be.visible")
+cy.get('.ehpfpvn0 > .next-1jphuq5').should("be.visible")
+cy.get('#open-navigation-menu-mobile').should("be.visible")
+cy.get('.next-1sh4jrc > img').should("be.visible")
+cy.get('.next-yzbslz').should("be.visible")
+cy.get('.emdezhw2 > .next-1jphuq5').should("be.visible")
+cy.get('.next-3zy62z').should("be.visible")
+cy.get('.next-qqgo2q').should("be.visible")
+})   
+})

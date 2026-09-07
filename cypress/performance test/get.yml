@@ -1,0 +1,11 @@
+config:
+  target: "https://httpbin.org/"
+  phases:
+    - duration: 1
+      arrivalRate: 1
+
+scenarios:
+  - name: "Get a source"
+    flow:
+      - get:
+          url: "{{target}}get"
