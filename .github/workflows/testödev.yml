@@ -1,58 +1,67 @@
+
 name: CI-CD Pipeline
 
 on:
+
   wordflow_dispatch:
+
   schedule:
     - cron: "0 9 * * *"
+
   push:
     branches:
       - main
-  pull_reguest: 
 
-  jobs:
-   builds:
-     runs on: ubuntu-latest
-     name: Build job 
-     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v3
+  pull_reguest:
 
-       - name: Echo user login
-         run: echo "Merhaba",${{github.actor}}
-   test:
-     runs on: ubuntu-latest
-     name: cypress job
-     container:
+jobs:
+
+  builds:
+    runs on: ubuntu-latest
+    name: Build job
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Echo user login
+        run: echo "Merhaba",${{github.actor}}
+
+  test:
+    runs on: ubuntu-latest
+    name: cypress job
+
+    container:
       image: cypress/base:latest
-     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v3
 
-       - name: Set up Node.js
-         uses: actions/setup-node@v3 
-         with:
-           node-version: 18
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-       - name: Install dependencies
-         uses: npm intsall
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-       - name: Run cypress tests
-         uses: npx cypress run 
+      - name: Install dependencies
+        uses: npm intsall
 
-       - name: UploadCypress videos
-         if: always()
-         uses: actions/Upload-arfifact@v4
-         with:
-           name: cypress-videos
-           path: cypress/videos/**/*.mp4
-           retention-days: 1
+      - name: Run cypress tests
+        uses: npx cypress run
 
+      - name: UploadCypress videos
+        if: always()
+        uses: actions/Upload-arfifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos/**/*.mp4
+          retention-days: 1
 
-       - name: UploadCypress screenshots
-         if: always()
-         uses: actions/Upload-arfifact@v4
-         with:
-           name: cypress-screenshots
-           path: cypress/screenshots/**/*.mp4
-           retention-days: 1
+      - name: UploadCypress screenshots
+        if: always()
+        uses: actions/Upload-arfifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/**/*.mp4
+          retention-days: 1
 
