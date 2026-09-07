@@ -1,9 +1,8 @@
-
 name: CI-CD Pipeline
 
 on:
 
-  wordflow_dispatch:
+  workflow_dispatch:
 
   schedule:
     - cron: "0 9 * * *"
@@ -12,12 +11,12 @@ on:
     branches:
       - main
 
-  pull_reguest:
+  pull_request:
 
 jobs:
 
   builds:
-    runs on: ubuntu-latest
+    runs-on: ubuntu-latest
     name: Build job
 
     steps:
@@ -28,7 +27,7 @@ jobs:
         run: echo "Merhaba",${{github.actor}}
 
   test:
-    runs on: ubuntu-latest
+    runs-on: ubuntu-latest
     name: cypress job
 
     container:
@@ -44,14 +43,14 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        uses: npm intsall
+        run: npm install
 
       - name: Run cypress tests
-        uses: npx cypress run
+        run: npx cypress run
 
       - name: UploadCypress videos
         if: always()
-        uses: actions/Upload-arfifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
           path: cypress/videos/**/*.mp4
@@ -59,9 +58,8 @@ jobs:
 
       - name: UploadCypress screenshots
         if: always()
-        uses: actions/Upload-arfifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: cypress-screenshots
           path: cypress/screenshots/**/*.mp4
           retention-days: 1
-
